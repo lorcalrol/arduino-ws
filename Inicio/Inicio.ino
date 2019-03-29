@@ -5,18 +5,18 @@
 
 */
 
-uint32_t var1=2;
-uint32_t var2=0;
-uint32_t var3=0;
+uint32_t temp=2;
+uint32_t hum=0;
+uint32_t pres=0;
 
 void setup(void) {
   Serial.begin(115200);
 }
 
 void loop() {
-  var1=var1*2;
-  var2=var2+2;
-  var3=var3-2;
-  Serial.printf("%u %u %u\n",var1,var2,var3);
+  temp=temp*2;
+  hum=hum+2;
+  pres=pres-2;
+  Serial.printf("%u %u %u\n",temp,hum,pres);
   delay(1000);
 }
