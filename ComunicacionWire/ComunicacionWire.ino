@@ -1,22 +1,3 @@
-#include <BearSSLHelpers.h>
-#include <CertStoreBearSSL.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiAP.h>
-#include <ESP8266WiFiGeneric.h>
-#include <ESP8266WiFiMulti.h>
-#include <ESP8266WiFiScan.h>
-#include <ESP8266WiFiSTA.h>
-#include <ESP8266WiFiType.h>
-#include <WiFiClient.h>
-#include <WiFiClientSecure.h>
-#include <WiFiClientSecureAxTLS.h>
-#include <WiFiClientSecureBearSSL.h>
-#include <WiFiServer.h>
-#include <WiFiServerSecure.h>
-#include <WiFiServerSecureAxTLS.h>
-#include <WiFiServerSecureBearSSL.h>
-#include <WiFiUdp.h>
-
 #include <Wire.h>
 
 void setup() {
@@ -29,21 +10,23 @@ void setup() {
 
 void loop() {
   // request 6 bytes from slave device #8
-  Wire.requestFrom(0xEC, 1); // EE ó EC
+  Wire.requestFrom(0x76, 1); // EE ó EC
 
   // slave may send less than requested
   while (Wire.available())
   {
     // receive a byte as character
     char c = Wire.read();
-    int32_t d =ESP.getChipId();
-
+    char d = ESP.getChipId();
+      
     // print the character
     Serial.printf("Received: %02X\n", c);
-    Serial.println(d);
-    Serial.printf("Hello world!");
+    Serial.printf("Received: %02X\n", d);
+    Serial.printf("Hello world!\n");
+    Serial.print(d);
+
   }
 
-   Serial.printf("Hello world2!");
+  Serial.printf("Hello world2!\n");
   delay(500);
 }
