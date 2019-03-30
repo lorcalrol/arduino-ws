@@ -40,8 +40,10 @@ void loop() {
 
     // print the character
     Serial.printf("Received: %02X\n", c);
-    Serial.print(d);
+    Serial.println(d);
+    Serial.printf("Hello world!");
   }
 
+   Serial.printf("Hello world2!");
   delay(500);
 }
