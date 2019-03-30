@@ -9,29 +9,17 @@ void setup() {
 }
 
 void loop() {
-  // request 6 bytes from slave device #8
   
-  Wire.beginTransmission(0x76);
-  Wire.write(0xD0);
-  Wire.requestFrom(0x76, 1); // EE ó EC
-  char c = Wire.read();
-      
+  Wire.beginTransmission(0x76); // start a connection with slave device
+  Wire.write(0xFD);             // select the register address
+  Wire.endTransmission();
+  
+  Wire.requestFrom(0x76, 2);    // number of bytes to read
+  uint8_t hum1 = Wire.read();      // read
+  uint8_t hum2 = Wire.read();      // read the following register address
+  
   // print the character
-  Serial.printf("Received: %02X\n", c);
-  
+  Serial.printf("Received: %u %u \n", hum1, hum2);
   delay(500);
   
-  Wire.endTransmission();
-//  // slave may send less than requested
-//  while (Wire.available())
-//  {
-//    // receive a byte as character
-//    char c = Wire.read();
-//      
-//    // print the character
-//    Serial.printf("Received: %02X\n", c);
-//    Serial.printf("Hello world!\n");
-
-//  }
-
 }
