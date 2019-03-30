@@ -14,12 +14,18 @@ void loop() {
   Wire.write(0xFD);             // select the register address
   Wire.endTransmission();
   
-  Wire.requestFrom(0x76, 2);    // number of bytes to read
-  uint8_t hum1 = Wire.read();      // read
-  uint8_t hum2 = Wire.read();      // read the following register address
-  
-  // print the character
-  Serial.printf("Received: %u %u \n", hum1, hum2);
+  Wire.requestFrom(0x76, 2);    // request 2 bytes from slave device #0x76
+
+  // slave may send less than requested
+  while (Wire.available())
+  {
+    // receive a byte as character
+    uint8_t hum1 = Wire.read();   // read
+    uint8_t hum2 = Wire.read();   // read the following register address
+
+    // print the character
+    Serial.printf("Received: %u %u \n", hum1, hum2);
+  } 
   delay(500);
   
 }
