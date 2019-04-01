@@ -17,38 +17,60 @@ void loop()
   /* Welcome message! Useful to know where  */
   Serial.printf("Ahoy! ESP8266 here!\n---\n");
 
- /* Begin transmission */
-  Wire.beginTransmission(0x76); 
-  
-  /* chipID register*/
-  Wire.write(0xF2); 
+  /* Begin transmission */
+  Wire.beginTransmission(0x76);
+
+  /* ctr_hum: Set humidity oversampling */
+  Wire.write(0xF2);
   Wire.write(B001);
 
+  /* ctrl_meas: Set pressure and temperature oversampling and mode */
   Wire.write(0xF4);
   Wire.write(B00100111);
 
-  Wire.write(0xFD);
+  /* First register to read from */
+  Wire.write(0xF7);
+
   /* End transmission */
   Wire.endTransmission();
-  
+
   /* Request data from slave with address 0x76 */
-  Wire.requestFrom(0x76, 2); 
+  Wire.requestFrom(0x76, 8);
+
+  /* DUDAS: PÁGINA 18 DEL DATASHEET BME280: NOSOTROS 3.5.3, CON TODO LO QUE VIENE? */
+  /*        MEJOR FORMA DE PONER EL WHILE?? TRANSMISSION, WRITE Y REQUEST DENTRO O FUERA? ALGUNAS MEDICIONES ME DAN 0 */
+  /*        LOS 20 BITS ESTÁN BIEN EN 32 BITS O HAY QUE APLICAR TRIMMING 4.2.2 U OTRA COSA? */
 
   /* Wait for data to be available */
   while (Wire.available())
   {
-    /* Receive the byte */
-    uint16_t hum1 = Wire.read();  
-    uint8_t hum2 = Wire.read();
+    /* Receive the bytes */
+    uint8_t pre1 = Wire.read();
+    uint8_t pre2 = Wire.read();
+    uint8_t pre3 = Wire.read();
+    uint32_t pre = pre1 << 12 + pre2 << 4 + pre3 >> 4;
 
-    uint16_t humtot=hum1<<8+hum2;
-    
+    uint8_t tem1 = Wire.read();
+    uint8_t tem2 = Wire.read();
+    uint8_t tem3 = Wire.read();
+    uint32_t tem = tem1 << 12 + tem2 << 4 + tem3 >> 4;
+
+    uint8_t hum1 = Wire.read();
+    uint8_t hum2 = Wire.read();
+    uint16_t hum = hum1 << 8 + hum2;
+
     /* Send it to console/monitor */
-    Serial.printf("Received: %u %u\n", hum1,hum2);
-    Serial.printf("Received: %u\n", humtot);
+    Serial.printf("Presure: %u %u %u\n", pre1, pre2, pre3);
+    Serial.printf("Pressure: %u\n", pre);
+
+    Serial.printf("Temperature: %u %u %u\n", tem1, tem2, tem3);
+    Serial.printf("Temperature: %u\n", tem);
+
+    Serial.printf("Humidity: %u %u\n", hum1, hum2);
+    Serial.printf("Humidity: %u\n", hum);
 
   }
-  
+
   /* Ensure not to flood with a huge amount of fast data */
   delay(500);
 }
