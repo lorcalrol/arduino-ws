@@ -29,6 +29,13 @@ void setup()
 
 }
 
+uint32_t extract(uint16_t pos)
+{
+  static uint32_t data;
+  data = arr[pos] << 12 + arr[pos + 1] << 4 + arr[pos + 2]>>4;
+  return data
+}
+
 /* Recurrent task, called forever */
 void loop()
 {
@@ -46,11 +53,17 @@ void loop()
   uint16_t arr_i = 0;
 
   /* While Wire.available is not 0 */
-  while (Wire.available() && arr_i <= 118)
+  while (Wire.available() && arr_i <= 128)
   {
     /* Receive the bytes */
     arr[arr_i++] = Wire.read();
-    Serial.printf("todo: %u\n", arr[arr_i]);
+  }
+
+  uint16_t arr_p = 0;
+  while (Wire.available() && arr_i <= 3)
+  {
+    /* Receive the bytes */
+    Serial.printf("todo: %02x\n", arr[arr_i]);
 
   }
 
