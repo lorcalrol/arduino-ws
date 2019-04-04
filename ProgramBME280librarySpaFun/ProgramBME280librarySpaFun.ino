@@ -40,21 +40,17 @@ void loop()
   /* Welcome message! Useful as a control point */
   Serial.printf("Ahoy! ESP8266 here!\n---\n");
 
-  Serial.print("Humidity: ");
-  Serial.print(BME280_obj.readFloatHumidity(), 0);
+  Serial.printf(" Humidity: %2.0f %%", BME280_obj.readFloatHumidity());
 
-  Serial.print(" Pressure: ");
-  Serial.print(BME280_obj.readFloatPressure(), 0);
+  Serial.printf(" \t Pressure: %6.0f Pa", BME280_obj.readFloatPressure());
 
-  Serial.print(" Alt: ");
-  //Serial.print(mySensor.readFloatAltitudeMeters(), 1);
-  Serial.print(BME280_obj.readFloatAltitudeFeet(), 1);
-
-  Serial.print(" Temp: ");
-  Serial.print(BME280_obj.readTempC(), 2);
-  //Serial.print(BME280_obj.readTempF(), 2);
-
-  Serial.println();
+  Serial.printf(" \t Alt: %5.1f m", BME280_obj.readFloatAltitudeMeters());
+  //Serial.printf(" \t Alt: %5.1 f",BME280_obj.readFloatAltitudeFeet());
+  
+  Serial.printf(" \t Temp: %5.2f ºC",BME280_obj.readTempC());
+  //Serial.printf(" \t Temp: %5.2f F",BME280_obj.readTempF());
+ 
+  Serial.printf("\n");
 
   /* Ensure not to flood with a huge amount of fast data */
   delay(500);
